@@ -195,7 +195,7 @@ def initial_host_tcp_recon(host, txt_output_path=None, xml_output_path=None, fas
         args = '-vv -Pn -A -sC -sS --top-ports=20 --open -T4 -oN {}'.format(txt_output_path)
         res = nm.scan(hosts=host, arguments=args)
     else:
-        args = '-vv -Pn -A -sC -sS -T4 -oN {}'.format(txt_output_path)
+        args = '-vv -Pn -A -sC -sS -T4 --open -oN {}'.format(txt_output_path)
         res = nm.scan(hosts=host, ports='-', arguments=args)        
     
     # output XML (if requested)
@@ -236,10 +236,10 @@ def initial_host_udp_recon(host, txt_output_path=None, xml_output_path=None, fas
     nm = nmap.PortScanner()
 
     if fast_port_scan:
-        args = '-vv -Pn -A -sC -sU -T4 --top-ports 20 -oN {}'.format(txt_output_path)  ## DEBUG MODE
+        args = '-vv -Pn -A -sC -sU -T4 --top-ports 20 --open -oN {}'.format(txt_output_path)  ## DEBUG MODE
         res = nm.scan(hosts=host, arguments=args)
     else:
-        args = '-vv -Pn -A -sC -sU -T4 --top-ports 200 -oN {}'.format(txt_output_path)
+        args = '-vv -Pn -A -sC -sU -T4 --top-ports 200 --open -oN {}'.format(txt_output_path)
         res = nm.scan(hosts=host, arguments=args)
 
         
