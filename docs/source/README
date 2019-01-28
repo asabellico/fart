@@ -1,0 +1,5 @@
+Run `sphinx-apidoc -o . ../../jart' in this directory.
+
+This will generate `modules.rst' and `jart.rst'.
+
+Then include `modules.rst' in your `index.rst' file.
