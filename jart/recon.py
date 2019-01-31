@@ -19,7 +19,7 @@ from jart.services import (
     smtp,
     ssh
 )
-from utils import *
+from jart.utils import *
 VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'vendor')
 
 from multiprocessing import Process

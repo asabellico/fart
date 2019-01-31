@@ -3,7 +3,7 @@ from __future__ import print_function
 import nmap
 import subprocess
 import tempfile
-from utils import *
+from jart.utils import *
 
 
 def nmapscripts(host, port, service, output_file, **kwargs):

@@ -3,7 +3,7 @@ from __future__ import print_function
 import nmap
 import subprocess
 import tempfile
-from utils import *
+from jart.utils import *
 
 VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'vendor')
 

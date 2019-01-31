@@ -243,9 +243,7 @@ setup_dict = dict(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Documentation',
         'Topic :: Software Development :: Libraries :: Python Modules',
@@ -266,12 +264,8 @@ setup_dict = dict(
     zip_safe=False,  # don't use eggs
     entry_points={
         'console_scripts': [
-            'jart_cli = jart.main:entry_point'
+            'jart = jart.__main__:entry_point'
         ],
-        # if you have a gui, use this
-        # 'gui_scripts': [
-        #     'jart_gui = jart.gui:entry_point'
-        # ]
     }
 )
 

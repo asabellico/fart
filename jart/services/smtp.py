@@ -4,7 +4,7 @@ import nmap
 import socket
 import subprocess
 import tempfile
-from utils import *
+from jart.utils import *
 
 def enumusers(host, port, service, output_file, **kwargs):
     USERNAME_FILES = [
