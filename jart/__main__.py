@@ -4,6 +4,7 @@
 
 from __future__ import print_function
 from datetime import datetime
+from collections import namedtuple
 
 import argparse
 import os
@@ -49,30 +50,42 @@ URL: <{url}>
     	required=True
     )
     arg_parser.add_argument(
+        '-m', '--max-concurrent',
+        default=3,
+        type=int,
+        help='Set max concurrent scans (default: 3)'
+    )
+
+    arg_parser.add_argument(
     	'-o', '--output',
     	type=str,
     	default=os.path.join(os.getcwd(), datetime.now().strftime("recon_%Y%m%d%H%M"))
     )
     arg_parser.add_argument(
-        '-s', '--skip-icmp-sweep',
+        '-ss', '--skip-icmp-sweep',
         action='store_true',
         help='Disable initial ICMP ping sweep'
     )
+    arg_parser.add_argument(
+        '-st', '--skip-tcp',
+        action='store_true',
+        help='Disable TCP ports scan'
+    )
+    arg_parser.add_argument(
+        '-su', '--skip-udp',
+        action='store_true',
+        help='Disable UDP ports scan'
+    )
+    
     arg_parser.add_argument(
         '-f', '--fast-port-scan',
         action='store_true',
         help='Enable fast TCP port scan (only TOP200 ports)'
     )
-
+    
     args = arg_parser.parse_args(args=argv[1:])
-
-    if '-' in args.target:
-        print('Sorry, only CIDR and single host format are accepted!')
-        exit(0)
-    elif '/' not in args.target:
-        args.target += '/32'
-
-    recon.target_recon(args.target, args.output, args.skip_icmp_sweep, args.fast_port_scan)
+       
+    recon.target_recon(args)
 
     return 0
 

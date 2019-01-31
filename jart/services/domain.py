@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import nmap
 import subprocess
 import tempfile
@@ -30,15 +32,14 @@ def dnsrecon(host, port, service, output_file, **kwargs):
                 found.append(line)
     except Exception as e:
        print_red('Error during dnsrecon: {}'.format(DNSRECON))
-       print_red('Error message: {}'.format(e.message))
+       print_red('Error message: {}'.format(e))
 
     if len(found) > 0:
         print_green('[*] Dnsrecon found the following items...')
         for item in found:
             print_green(item)
     else:
-        print('No items found during dnsrecon')    
-
+        print('No items found during dnsrecon')
 
     with open(output_file, 'w') as output:
         output.write(results)

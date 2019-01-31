@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import nmap
 import subprocess
 import tempfile
@@ -28,7 +30,7 @@ def commonlogins(host, port, service, output_file, **kwargs):
         passwords_file.write('\n'.join(COMMON_PASS))
         passwords_file.write('\n')
 
-    HYDRA = 'hydra -v -I -L {} -P {} -t4 ssh://{}:{}'.format(usernames_path, passwords_path, host, port)
+    HYDRA = 'hydra -v -I -L {} -P {} -t4 ssh://{}:{} 2>/dev/null'.format(usernames_path, passwords_path, host, port)
     try:
         p = subprocess.Popen(HYDRA, stdout=subprocess.PIPE, shell=True)
         results, __ = p.communicate()
@@ -44,7 +46,7 @@ def commonlogins(host, port, service, output_file, **kwargs):
             output.write(results)
     except Exception as e:
         print_red('Error during hydra (ssh): {}'.format(HYDRA))
-        print_red('Error message: {}'.format(e.message))
+        print_red('Error message: {}'.format(e))
 
     os.unlink(usernames_path)
     os.unlink(passwords_path)

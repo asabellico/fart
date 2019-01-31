@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import nmap
 import subprocess
 import tempfile
@@ -33,7 +35,7 @@ def commonlogins(host, port, service, output_file, **kwargs):
             output.write(results)
     except Exception as e:
         print_red('Error during ncrack (rdp): {}'.format(NCRACK))
-        print_red('Error message: {}'.format(e.message))
+        print_red('Error message: {}'.format(e))
 
     os.unlink(usernames_path)
     os.unlink(passwords_path)

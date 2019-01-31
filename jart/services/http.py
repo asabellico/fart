@@ -1,4 +1,7 @@
+from __future__ import print_function
+
 import nmap
+import os
 import subprocess
 import tempfile
 from utils import *
@@ -9,7 +12,8 @@ VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '.
 def dirbuster(host, port, http_service, output_file, **kwargs):
     DICTS = [
         '/usr/share/dirb/wordlists/common.txt',
-        '/usr/share/seclists/Discovery/Web-Content/CGIs.txt',
+        #'/usr/share/seclists/Discovery/Web-Content/CGIs.txt',
+        #'/usr/share/dirb/wordlists/vulns',
         #'/usr/share/dirb/wordlists/big.txt',
         #'/usr/share/dirb/wordlists/indexes.txt',
         #'/usr/share/dirb/wordlists/spanish.txt',
@@ -17,28 +21,35 @@ def dirbuster(host, port, http_service, output_file, **kwargs):
         
     ]
     # TODO evaluate additional wordlists to use
-    # folders = ["/usr/share/dirb/wordlists", "/usr/share/dirb/wordlists/vulns"]
 
+    url = '{}://{}:{}'.format(http_service.get('name', 'http'), host, port)
 
-    url = '{}://{}:{}'.format(http_service.get('name'), host, port)
-
-    found = []
+    dictionaries = []
     for dictionary in DICTS:
         if not os.path.exists(dictionary):
             print_yellow('Cannot find dictionary: {}. Skipping...'.format(dictionary))
             continue
 
+        if os.path.isfile(dictionary):
+            dictionaries.append(dictionary)
+        elif os.path.isdir(dictionary):
+            for filename in os.listdir(dictionary):
+                dict_path = os.path.join(dictionary, filename)
+                if dict_path not in dictionaries:
+                    dictionaries.append(dict_path)
+
+    found = []
+    for dictionary in dictionaries:
         DIRBSCAN = 'dirb {} {} -o {} -S -r'.format(url, dictionary, output_file)
         try:
-            results = subprocess.check_output(DIRBSCAN, shell=True)
-            _results = results.split("\n")
+            results = subprocess.check_output(DIRBSCAN, bufsize=-1, shell=True)
+            _results = results.split('\n')
             for line in _results:
                 if '+' in line and line not in found:
                     found.append(line)
         except Exception as e:
            print_red('Error during dirb scan: {}'.format(DIRBSCAN))
-           print_red('Error message: {}'.format(e.message))
-
+           print_red('Error message: {}'.format(e))
 
     if len(found) > 0:
         print_green('[*] Dirb found the following items...')
@@ -86,7 +97,7 @@ def heartbleed(host, port, http_service, output_file, **kwargs):
             output.write(results)
 
     except Exception as e:
-        print_red('Error during heartbleed check: {}'.format(e.message))
+        print_red('Error during heartbleed check: {}'.format(e))
 
 
 def shellshock(host, port, http_service, output_file, **kwargs):
