@@ -21,22 +21,24 @@ Protocol handled in current version:
 Instructions
 ------------
 
-APT packages required::
-    apt install dnsrecon hydra dirb davtest ncrack enum4linux snmp snmpwalk snmp-check onesixtyone
+APT packages required:
+
+    `apt install dnsrecon hydra dirb davtest ncrack enum4linux snmp snmpwalk snmp-check onesixtyone`
 
 PIP packages dependecies:
+```
 ipaddress==1.0.17
 python-nmap==0.6.1
-
+```
 
 Some command-line examples:
 
-* Fast port scan on a subnet::
-    jart --fast-port-scan -t 10.11.1.0./24
-* Complete analysis on a single host::
-    jart -t 10.11.1.123
-* Complete analysis skipping ICMP host discovery::
-    jart --skip-icmp-sweep -t 10.11.1.123
+* Fast port scan on a subnet:
+    `jart --fast-port-scan -t 10.11.1.0./24`
+* Complete analysis on a single host:
+    `jart -t 10.11.1.123`
+* Complete analysis skipping ICMP host discovery:
+    `jart --skip-icmp-sweep -t 10.11.1.123`
 
 Tested on Kali GNU/Linux
 
