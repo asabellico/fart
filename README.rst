@@ -8,6 +8,7 @@ Project Setup
 JART executes a complete recon on a subnet by checking various procotols common vulnerabilities, common logins, etc. 
 
 Protocol handled in current version:
+
 * HTTP (resources enumeration and more..)
 * HTTPS (include heartbleed check)
 * FTP
@@ -29,6 +30,7 @@ python-nmap==0.6.1
 
 
 Some command-line examples:
+
 * Fast port scan on a subnet::
     jart --fast-port-scan -t 10.11.1.0./24
 * Complete analysis on a single host::
