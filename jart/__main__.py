@@ -78,9 +78,9 @@ URL: <{url}>
     )
     
     arg_parser.add_argument(
-        '-f', '--fast-port-scan',
+        '-p', '--pedantic-port-scan',
         action='store_true',
-        help='Enable fast TCP port scan (only TOP200 ports)'
+        help='Enable pedantic TCP port scan (TCP port range 1-65535)'
     )
     
     args = arg_parser.parse_args(args=argv[1:])

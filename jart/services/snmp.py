@@ -5,7 +5,7 @@ import subprocess
 import tempfile
 from jart.utils import *
 
-VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'vendor')
+VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'vendor')
 
 def nmapscripts(host, port, service, output_file, **kwargs):
     SCRIPTS= [

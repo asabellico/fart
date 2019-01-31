@@ -7,7 +7,7 @@ import tempfile
 from jart.utils import *
 
 
-VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..', 'vendor')
+VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'vendor')
 
 def dirbuster(host, port, http_service, output_file, **kwargs):
     DICTS = [
@@ -42,7 +42,8 @@ def dirbuster(host, port, http_service, output_file, **kwargs):
     for dictionary in dictionaries:
         DIRBSCAN = 'dirb {} {} -o {} -S -r'.format(url, dictionary, output_file)
         try:
-            results = subprocess.check_output(DIRBSCAN, bufsize=-1, shell=True)
+            p = subprocess.Popen(DIRBSCAN, stdout=subprocess.PIPE, bufsize=-1, shell=True)
+            results, __ = p.communicate()
             _results = results.split('\n')
             for line in _results:
                 if '+' in line and line not in found:
@@ -105,9 +106,9 @@ def shellshock(host, port, http_service, output_file, **kwargs):
 
 def webdav(host, port, http_service, output_file, **kwargs):
     if port == 80:
-        DAVTEST = 'davtest -cleanup -url {}://{}/ 2>1'.format(http_service.get('name', 'http'), host)
+        DAVTEST = 'davtest -cleanup -url {}://{}/ 2>&1'.format(http_service.get('name', 'http'), host)
     else:
-        DAVTEST = 'davtest -cleanup -url {}://{}:{}/ 2>1'.format(http_service.get('name', 'http'), host, port)
+        DAVTEST = 'davtest -cleanup -url {}://{}:{}/ 2>&1'.format(http_service.get('name', 'http'), host, port)
 
     results = subprocess.check_output(DAVTEST, shell=True)
     if 'SUCCEED' in results:

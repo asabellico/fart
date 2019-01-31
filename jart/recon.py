@@ -17,10 +17,11 @@ from jart.services import (
     snmp,
     smb, 
     smtp,
-    ssh
+    ssh,
+    mysql
 )
 from jart.utils import *
-VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'vendor')
+VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'vendor')
 
 from multiprocessing import Process
 
@@ -34,6 +35,7 @@ def target_recon(args):
 
     # alive host scan
     if not args.skip_icmp_sweep:
+        print('Checking for alive hosts...')
         targets_to_scan = check_alive_hosts(target_list)
         print_green('Found {} alive host(s) during ICMP alive host scan'.format(len(targets_to_scan)))    
     else:
@@ -57,7 +59,7 @@ def target_recon(args):
         except OSError:
             print_yellow('Output directory for host {} does exist. Overwriting!'.format(host))
 
-        scan_proc = Process(target=host_recon, args=(host, host_work_dir, args.skip_tcp, args.skip_udp, args.fast_port_scan))
+        scan_proc = Process(target=host_recon, args=(host, host_work_dir, args.skip_tcp, args.skip_udp, args.pedantic_port_scan))
         scan_queue.append(scan_proc)
 
 
@@ -72,7 +74,7 @@ def target_recon(args):
                 'host': p._args[0]
             }
 
-            print('[{}] Launching {}recon'.format(p._args[0], '(fast-port-scan) '*args.fast_port_scan))
+            print('[{}] Launching {}recon'.format(p._args[0], '(pedantic port scan) '*args.pedantic_port_scan))
             p.start()
             
             running_scans.append( (p, p_info) )
@@ -194,7 +196,7 @@ def check_alive_hosts(target):
     # return list(merge_alive_hosts)
 
 
-def host_recon(host, work_dir, skip_tcp, skip_udp, fast_port_scan):
+def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
     SERVICES_RECON_MAP = {
         'domain': [
             domain.nmapscripts,
@@ -225,6 +227,16 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, fast_port_scan):
 
         'microsoft-ds': [
             smb.nmapscripts,
+            smb.enum4linux,
+        ],
+
+        'mysql': [
+            mysql.commonlogins,
+        ],
+
+        'netbios-ssn': [
+            smb.nmapscripts,
+            smb.enum4linux,
         ],
 
         'rdp': [
@@ -249,21 +261,21 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, fast_port_scan):
 
     # TCP recon
     if not skip_tcp:
-        print('[{}] Starting nmap {}TCP port scan...'.format(host, '(fast) '*fast_port_scan))
+        print('[{}] Starting nmap {}TCP port scan...'.format(host, '(pedantic) '*pedantic_port_scan))
         tcp_txt_output_path = os.path.join(work_dir, '{}_TCP.txt'.format(host))
         tcp_xml_output_path = os.path.join(work_dir, '{}_TCP.xml'.format(host))
-        tcp_services = initial_host_tcp_recon(host, tcp_txt_output_path, tcp_xml_output_path, fast_port_scan)
-        print('[{}] Finished nmap {}TCP port scan...'.format(host, '(fast) '*fast_port_scan))
+        tcp_services = initial_host_tcp_recon(host, tcp_txt_output_path, tcp_xml_output_path, pedantic_port_scan)
+        print('[{}] Finished nmap {}TCP port scan...'.format(host, '(pedantic) '*pedantic_port_scan))
     else:
         tcp_services = {}
 
     # UDP recon
     if not skip_udp:
-        print('[{}] Starting nmap {}UDP port scan...'.format(host, '(fast) '*fast_port_scan))
+        print('[{}] Starting nmap {}UDP port scan...'.format(host, '(pedantic) '*pedantic_port_scan))
         udp_txt_output_path = os.path.join(work_dir, '{}_UDP.txt'.format(host))
         udp_xml_output_path = os.path.join(work_dir, '{}_UDP.xml'.format(host))
-        udp_services = initial_host_udp_recon(host, udp_txt_output_path, udp_xml_output_path, fast_port_scan)
-        print('[{}] Finished nmap {}UDP port scan...'.format(host, '(fast) '*fast_port_scan))
+        udp_services = initial_host_udp_recon(host, udp_txt_output_path, udp_xml_output_path, pedantic_port_scan)
+        print('[{}] Finished nmap {}UDP port scan...'.format(host, '(pedantic) '*pedantic_port_scan))
     else:
         udp_services = {}
 
@@ -302,15 +314,15 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, fast_port_scan):
     print('[{}] Finished host services scan...'.format(host))
  
 
-def initial_host_tcp_recon(host, txt_output_path=None, xml_output_path=None, fast_port_scan=False):
+def initial_host_tcp_recon(host, txt_output_path=None, xml_output_path=None, pedantic_port_scan=False):
     nm = nmap.PortScanner()
 
-    if fast_port_scan:
-        args = '-vv -Pn -A -sC -sS --top-ports=20 --open -T4 -oN {}'.format(txt_output_path)
-        res = nm.scan(hosts=host, arguments=args)
+    if pedantic_port_scan:
+        args = '-vv -Pn -A -sC -sS --open -T4 -oN {}'.format(txt_output_path)
+        res = nm.scan(hosts=host, ports='-', arguments=args)
     else:
-        args = '-vv -Pn -A -sC -sS -T4 --open -oN {}'.format(txt_output_path)
-        res = nm.scan(hosts=host, ports='-', arguments=args)        
+        args = '-vv -Pn -A -sC -sS --top-ports 1000 -T4 --open -oN {}'.format(txt_output_path)
+        res = nm.scan(hosts=host, arguments=args)        
     
     # output XML (if requested)
     if xml_output_path:
@@ -345,14 +357,14 @@ def initial_host_tcp_recon(host, txt_output_path=None, xml_output_path=None, fas
     return nm[host].get('tcp')
 
 
-def initial_host_udp_recon(host, txt_output_path=None, xml_output_path=None, fast_port_scan=False):
+def initial_host_udp_recon(host, txt_output_path=None, xml_output_path=None, pedantic_port_scan=False):
     nm = nmap.PortScanner()
 
-    if fast_port_scan:
-        args = '-vv -Pn -A -sC -sU -T4 --top-ports 20 --open -oN {}'.format(txt_output_path)  ## DEBUG MODE
+    if pedantic_port_scan:
+        args = '-vv -Pn -A -sC -sU -T4 --top-ports 200 --open -oN {}'.format(txt_output_path)  ## DEBUG MODE
         res = nm.scan(hosts=host, arguments=args)
     else:
-        args = '-vv -Pn -A -sC -sU -T4 --top-ports 200 --open -oN {}'.format(txt_output_path)
+        args = '-vv -Pn -A -sC -sU -T4 --top-ports 20 --open -oN {}'.format(txt_output_path)
         res = nm.scan(hosts=host, arguments=args)
 
         

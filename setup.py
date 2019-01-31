@@ -254,6 +254,7 @@ setup_dict = dict(
     install_requires=[
         # your module dependencies
     ] + python_version_specific_requires,
+    include_package_data=True,
     # Allow tests to be run with `python setup.py test'.
     tests_require=[
         'pytest==2.5.1',
