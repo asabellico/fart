@@ -25,12 +25,6 @@ APT packages required:
 
     `apt install dnsrecon hydra dirb davtest ncrack enum4linux snmp snmpwalk snmp-check onesixtyone`
 
-PIP packages dependecies:
-```
-ipaddress==1.0.17
-python-nmap==0.6.1
-```
-
 Some command-line examples:
 
 * Fast port scan on a subnet:
