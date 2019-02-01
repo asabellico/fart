@@ -1,11 +1,11 @@
-==============================
-Just Another Recon Tool (JART)
-==============================
+=================================
+Finally Another Recon Tool (fart)
+=================================
 
 Project Setup
 =============
 
-JART executes a complete recon on a subnet by checking various procotols common vulnerabilities, common logins, etc. 
+Fart executes a complete recon on a subnet by checking various procotols common vulnerabilities, common logins, etc. 
 
 Protocol handled in current version:
 
@@ -28,13 +28,13 @@ APT packages required:
 Some command-line examples:
 
 * Fast port scan on a subnet (TCP top1000 - UDP top200):
-    `jart -t 10.11.1.0./24`
+    `fart -t 10.11.1.0./24`
 * Fast port scan on a subnet only TCP (TCP top1000):
-    `jart --skip-udp -t 10.11.1.0./24`
+    `fart --skip-udp -t 10.11.1.0./24`
 * Complete analysis on a single host:
-    `jart -t --pedantic-port-scan 10.11.1.123`
+    `fart -t --pedantic-port-scan 10.11.1.123`
 * Complete analysis skipping ICMP host discovery:
-    `jart --skip-icmp-sweep -t 10.11.1.123`
+    `fart --skip-icmp-sweep -t 10.11.1.123`
 
 Tested on Kali GNU/Linux
 

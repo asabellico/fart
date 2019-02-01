@@ -35,16 +35,16 @@ except ImportError:
 sys.path.insert(0, os.path.abspath('.'))
 
 ## Constants
-CODE_DIRECTORY = 'jart'
+CODE_DIRECTORY = 'fart'
 DOCS_DIRECTORY = 'docs'
 TESTS_DIRECTORY = 'tests'
 PYTEST_FLAGS = ['--doctest-modules']
 
 # Import metadata. Normally this would just be:
 #
-#     from jart import metadata
+#     from fart import metadata
 #
-# However, when we do this, we also import `jart/__init__.py'. If this
+# However, when we do this, we also import `fart/__init__.py'. If this
 # imports names from some other modules and these modules have third-party
 # dependencies that need installing (which happens after this file is run), the
 # script will crash. What we do instead is to load the metadata module by path
@@ -253,6 +253,8 @@ setup_dict = dict(
     packages=find_packages(exclude=(TESTS_DIRECTORY,)),
     install_requires=[
         # your module dependencies
+        'nmap==0.0.1',
+        'ipaddress==1.0.22'
     ] + python_version_specific_requires,
     include_package_data=True,
     # Allow tests to be run with `python setup.py test'.
@@ -265,7 +267,7 @@ setup_dict = dict(
     zip_safe=False,  # don't use eggs
     entry_points={
         'console_scripts': [
-            'jart = jart.__main__:entry_point'
+            'fart = fart.__main__:entry_point'
         ],
     }
 )

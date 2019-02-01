@@ -4,7 +4,7 @@ import nmap
 import os
 import subprocess
 import tempfile
-from jart.utils import *
+from fart.utils import *
 
 
 VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'vendor')

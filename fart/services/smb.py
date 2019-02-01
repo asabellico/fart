@@ -3,7 +3,7 @@ from __future__ import print_function
 import nmap
 import subprocess
 import tempfile
-from jart.utils import *
+from fart.utils import *
 
 def nmapscripts(host, port, http_service, output_file, **kwargs):
     SMB_SCRIPTS= [

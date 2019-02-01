@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """"""
 
-from jart import metadata
+from fart import metadata
 
 
 __version__ = metadata.version

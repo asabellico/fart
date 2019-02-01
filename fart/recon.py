@@ -9,7 +9,7 @@ import time
 import ipaddress
 import tempfile
 
-from jart.services import (
+from fart.services import (
     domain, 
     ftp, 
     http, 
@@ -20,7 +20,7 @@ from jart.services import (
     ssh,
     mysql
 )
-from jart.utils import *
+from fart.utils import *
 VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'vendor')
 
 from multiprocessing import Process

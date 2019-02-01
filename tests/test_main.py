@@ -8,8 +8,8 @@ from pytest import raises
 import pytest
 parametrize = pytest.mark.parametrize
 
-from jart import metadata
-from jart.main import main
+from fart import metadata
+from fart.main import main
 
 
 class TestMain(object):
