@@ -27,10 +27,12 @@ APT packages required:
 
 Some command-line examples:
 
-* Fast port scan on a subnet:
-    `jart --fast-port-scan -t 10.11.1.0./24`
+* Fast port scan on a subnet (TCP top1000 - UDP top200):
+    `jart -t 10.11.1.0./24`
+* Fast port scan on a subnet only TCP (TCP top1000):
+    `jart --skip-udp -t 10.11.1.0./24`
 * Complete analysis on a single host:
-    `jart -t 10.11.1.123`
+    `jart -t --pedantic-port-scan 10.11.1.123`
 * Complete analysis skipping ICMP host discovery:
     `jart --skip-icmp-sweep -t 10.11.1.123`
 
