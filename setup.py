@@ -253,7 +253,7 @@ setup_dict = dict(
     packages=find_packages(exclude=(TESTS_DIRECTORY,)),
     install_requires=[
         # your module dependencies
-        'nmap==0.0.1',
+        'python-nmap==0.6.1',
         'ipaddress==1.0.22'
     ] + python_version_specific_requires,
     include_package_data=True,
