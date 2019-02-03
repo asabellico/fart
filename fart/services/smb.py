@@ -16,12 +16,14 @@ def nmapscripts(host, port, http_service, output_file, **kwargs):
     
 
 def enum4linux(host, port, http_service, output_file, **kwargs):
-    ENUM4LINUX = 'enum4linux -v {}'.format(host)
+    ENUM4LINUX = 'enum4linux -v {} 2>&1'.format(host)
     try:
-        results = subprocess.check_output(DIRBSCAN, shell=True)
+        results = subprocess.check_output(ENUM4LINUX, shell=True)
+
+        with open(output_file, 'w') as output:
+            output.write(results)
     except Exception as e:
         print_red('Error during enum4linux: {}'.format(ENUM4LINUX))
         print_red('Error message: {}'.format(e))
 
-    with open(output_file, 'w') as output:
-        output.write(results)
+    
