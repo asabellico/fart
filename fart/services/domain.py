@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import nmap
-import subprocess
 import tempfile
+
 from fart.utils import *
 
 def nmapscripts(host, port, service, output_file, **kwargs):
@@ -25,7 +25,7 @@ def dnsrecon(host, port, service, output_file, **kwargs):
     DNSRECON = 'dnsrecon -n {} -t rvl -r {}'.format(host, target)
     found = []
     try:
-        results = subprocess.check_output(DNSRECON, shell=True)
+        results, __ = execute_cmd(DNSRECON)
         _results = results.split("\n")
         for line in _results:
             if '+' in line and line not in found:

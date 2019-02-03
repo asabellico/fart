@@ -23,7 +23,7 @@ def commonlogins(host, port, service, output_file, **kwargs):
 
     NCRACK = 'ncrack -vv -f -U {} -P {} --passwords-first rdp://{}:{},CL=1'.format(usernames_path, passwords_path, host, port)
     try:
-        results = subprocess.check_output(NCRACK, shell=True)
+        results, __ = execute_cmd(NCRACK)
         _results = results.split('\n')
         for line in _results:
             if 'Discovered credentials on' in line:

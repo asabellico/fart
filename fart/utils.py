@@ -1,6 +1,13 @@
 from __future__ import print_function
 
 import os
+import subprocess
+
+def execute_cmd(cmd):
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, bufsize=-1, shell=True)
+    _stdout, _stderr = p.communicate()
+
+    return _stdout, _stderr
 
 def print_red(msg):
 	print('\033[91m{}\033[0m'.format(msg))

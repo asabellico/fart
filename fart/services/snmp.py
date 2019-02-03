@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import nmap
-import subprocess
 import tempfile
+
 from fart.utils import *
 
 VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'vendor')
@@ -35,8 +35,9 @@ def enum(host, port, service, output_file, **kwargs):
             community_file.write('{}\n'.format(comm))
     
     ONESIXONESCAN = "onesixtyone -c {} {}".format(community_file_path, host)
-    results = subprocess.check_output(ONESIXONESCAN, shell=True).strip()
-    _results = results.split('\n')
+    results, __ = execute_cmd(ONESIXONESCAN)
+    _results = results.strip().split('\n')
+
     snmp_active = False
     for line in _results:
         if 'Scanning' in line:
@@ -73,8 +74,7 @@ def enum(host, port, service, output_file, **kwargs):
         for comm in COMMUNITIES:
             output.write('-- Community string: {}\n'.format(comm))
             SNMPWALK = "snmpwalk -c {} -v1 {} {} 2>/dev/null".format(comm, host, mib)
-            p = subprocess.Popen(SNMPWALK, stdout=subprocess.PIPE, shell=True)
-            results, __ = p.communicate()
+            results, __ = execute_cmd(SNMPWALK)
             output.write(results)
     output.write('\n')
 
@@ -82,8 +82,7 @@ def enum(host, port, service, output_file, **kwargs):
     for comm in COMMUNITIES:
         output.write('-- Community string: {}\n'.format(comm))
         SNMPWALK = "snmp-check -c {} {} 2>/dev/null".format(comm, host)
-        p = subprocess.Popen(SNMPWALK, stdout=subprocess.PIPE, shell=True)
-        results, __ = p.communicate()
+        results, __ = execute_cmd(SNMPWALK)
         output.write(results)
     output.write('\n')
 

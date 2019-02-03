@@ -1,13 +1,13 @@
 #!/usr/bin/python
 from __future__ import print_function
 
+import ipaddress
 import nmap
 import os
 import re
-import subprocess
 import time
-import ipaddress
 import tempfile
+from multiprocessing import Process
 
 from fart.services import (
     domain, 
@@ -21,9 +21,9 @@ from fart.services import (
     mysql
 )
 from fart.utils import *
+
 VENDOR_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'vendor')
 
-from multiprocessing import Process
 
 def target_recon(args):
     complete_recon_start_time = time.time()

@@ -2,8 +2,8 @@ from __future__ import print_function
 
 import nmap
 import socket
-import subprocess
 import tempfile
+
 from fart.utils import *
 
 def enumusers(host, port, service, output_file, **kwargs):

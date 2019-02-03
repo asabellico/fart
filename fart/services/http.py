@@ -2,8 +2,8 @@ from __future__ import print_function
 
 import nmap
 import os
-import subprocess
 import tempfile
+
 from fart.utils import *
 
 
@@ -42,8 +42,7 @@ def dirbuster(host, port, http_service, output_file, **kwargs):
     for dictionary in dictionaries:
         DIRBSCAN = 'dirb {} {} -o {} -S -r'.format(url, dictionary, output_file)
         try:
-            p = subprocess.Popen(DIRBSCAN, stdout=subprocess.PIPE, bufsize=-1, shell=True)
-            results, __ = p.communicate()
+            results, __ = execute_cmd(DIRBSCAN)
             _results = results.split('\n')
             for line in _results:
                 if '+' in line and line not in found:
@@ -86,7 +85,7 @@ def heartbleed(host, port, http_service, output_file, **kwargs):
 
     HBSCAN = 'python {} {} -p {}'.format(HBCMD, host, port)
     try:
-        results = subprocess.check_output(HBSCAN, shell=True)
+        results, __ = execute_cmd(HBSCAN)
         _results = results.split("\n")
         
         for line in _results:
@@ -102,6 +101,7 @@ def heartbleed(host, port, http_service, output_file, **kwargs):
 
 
 def shellshock(host, port, http_service, output_file, **kwargs):
+    # TODO
     pass
 
 def webdav(host, port, http_service, output_file, **kwargs):
@@ -110,7 +110,7 @@ def webdav(host, port, http_service, output_file, **kwargs):
     else:
         DAVTEST = 'davtest -cleanup -url {}://{}:{}/ 2>&1'.format(http_service.get('name', 'http'), host, port)
 
-    results = subprocess.check_output(DAVTEST, shell=True)
+    results, __ = execute_cmd(DAVTEST)
     if 'SUCCEED' in results:
         print_green('[{}] Host has WebDAV enabled and something interesting can be done (check output file)'.format(host))
 

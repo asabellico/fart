@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import nmap
-import subprocess
 import tempfile
+
 from fart.utils import *
 
 def nmapscripts(host, port, service, output_file, **kwargs):
@@ -37,8 +37,7 @@ def commonlogins(host, port, service, output_file, **kwargs):
 
     HYDRA = 'hydra -v -I -L {} -P {} -t4 ftp://{}:{} 2>/dev/null'.format(usernames_path, passwords_path, host, port)
     try:
-        p = subprocess.Popen(HYDRA, stdout=subprocess.PIPE, shell=True)
-        results, __ = p.communicate()
+        results, __ = execute_cmd(HYDRA)
         _results = results.split('\n')
 
         for line in _results:

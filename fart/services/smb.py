@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import nmap
-import subprocess
 import tempfile
+
 from fart.utils import *
 
 def nmapscripts(host, port, http_service, output_file, **kwargs):
@@ -18,7 +18,7 @@ def nmapscripts(host, port, http_service, output_file, **kwargs):
 def enum4linux(host, port, http_service, output_file, **kwargs):
     ENUM4LINUX = 'enum4linux -v {} 2>&1'.format(host)
     try:
-        results = subprocess.check_output(ENUM4LINUX, shell=True)
+        results, __  = execute_cmd(ENUM4LINUX)
 
         with open(output_file, 'w') as output:
             output.write(results)
