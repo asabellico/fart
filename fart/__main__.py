@@ -51,9 +51,9 @@ URL: <{url}>
     )
     arg_parser.add_argument(
         '-m', '--max-concurrent',
-        default=3,
+        default=5,
         type=int,
-        help='Set max concurrent scans (default: 3)'
+        help='Set max concurrent scans (default: 5)'
     )
 
     arg_parser.add_argument(

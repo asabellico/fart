@@ -105,6 +105,9 @@ def target_recon(args):
     print('Total execution time: {}'.format(hms_string(time.time()-complete_recon_start_time)))
     beep()
 
+    # repair broken stty
+    execute_cmd('stty sane')
+
 
 def parse_targets(target):
     cidr_pattern = re.compile(r'\d{1,3}.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}')
