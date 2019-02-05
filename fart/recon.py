@@ -18,7 +18,8 @@ from fart.services import (
     smb, 
     smtp,
     ssh,
-    mysql
+    mysql,
+    vnc
 )
 from fart.utils import *
 
@@ -260,6 +261,9 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
             ssh.commonlogins,
         ],
 
+        'vnc': [
+            vnc.commonlogins
+        ]
     }
 
     # TCP recon
