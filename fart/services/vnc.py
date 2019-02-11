@@ -8,6 +8,10 @@ from fart.utils import *
 def commonlogins(host, port, service, output_file, **kwargs):
     COMMON_PASS =  [ 'root', 'toor', 'password', 'r00t', 'Password1', '12345678', '?????', 'test', 'test2' ]
 
+    if 'hostname' in kwargs:
+        hostname_first = kwargs['hostname'].split('.')[0]
+        COMMON_PASS.append(hostname_first)
+
     passwords_path = tempfile.mktemp()
     with open(passwords_path, 'w') as passwords_file:
         passwords_file.write('\n'.join(COMMON_PASS))

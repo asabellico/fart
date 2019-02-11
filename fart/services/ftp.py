@@ -24,6 +24,11 @@ def commonlogins(host, port, service, output_file, **kwargs):
     COMMON_USERS = [ 'root', 'toor', 'user', 'r00t' ]
     COMMON_PASS = [ 'root', 'toor', 'password', 'r00t', 'Password1', '12345678', '?????' ]
 
+    if 'hostname' in kwargs:
+        hostname_first = kwargs['hostname'].split('.')[0]
+        COMMON_USERS.append(hostname_first)
+        COMMON_PASS.append(hostname_first)
+    
     usernames_path = tempfile.mktemp()
     passwords_path = tempfile.mktemp()
     with open(usernames_path, 'w') as usernames_file:

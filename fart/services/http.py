@@ -72,7 +72,8 @@ def nmapscripts(host, port, service, output_file, **kwargs):
         'http-method-tamper',
         'http-passwd',
         'http-robots.txt',
-        'http-webdav-scan'
+        'http-webdav-scan',
+        'http-shellshock'
     ]
 
     nm = nmap.PortScanner()

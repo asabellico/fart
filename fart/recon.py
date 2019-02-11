@@ -199,8 +199,28 @@ def check_alive_hosts(target):
     #     merge_alive_hosts.add(h)
     # return list(merge_alive_hosts)
 
+def get_rev_nslookup(ip):
+    output, __ = execute_cmd('host {}'.format(ip))
+    hostname = None
+    if 'domain name pointer' in output:
+        for l in output.split('\n'):
+            try:
+                hostname = l.split(' ')[4].rstrip('.')
+            except IndexError:
+                pass
+
+            if hostname:
+                return hostname
+
+    return None
 
 def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
+    hostname = get_rev_nslookup(host)
+    
+    addtional_params = {}
+    if hostname:
+        addtional_params['hostname'] = hostname
+    
     SERVICES_RECON_MAP = {
         'domain': [
             domain.nmapscripts,
@@ -215,7 +235,7 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
         'http': [
             http.nmapscripts,
             http.webdav,
-            http.shellshock,
+        #    http.shellshock,
 
             http.dirbuster,
         ],
@@ -224,7 +244,7 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
             http.nmapscripts,
             http.heartbleed,
             http.webdav,
-            http.shellshock,
+        #    http.shellshock,
 
             http.dirbuster,
         ],
@@ -248,7 +268,7 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
         ],
 
         'smtp': [
-            smtp.enumusers,
+           smtp.enumusers,
         ],
         
         'snmp': [
@@ -265,6 +285,7 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
             vnc.commonlogins
         ]
     }
+
 
     # TCP recon
     if not skip_tcp:
@@ -304,7 +325,7 @@ def host_recon(host, work_dir, skip_tcp, skip_udp, pedantic_port_scan):
                 start_time = time.time()
 
                 try:
-                    serv_recon(host, str(serv_port), serv, serv_recon_output)
+                    serv_recon(host, str(serv_port), serv, serv_recon_output, **addtional_params)
                 except Exception as e:
                     print_red('[{}] Exception while executing {} recon procedure'.format(host, serv_recon.__name__))
                     print_red('[{}] Error message: {}'.format(host, e))
