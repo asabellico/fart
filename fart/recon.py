@@ -58,8 +58,10 @@ def target_recon(args):
             host_work_dir = os.path.join(args.output, host)
             os.makedirs(host_work_dir)
         except OSError:
-            print_yellow('Output directory for host {} does exist. Overwriting!'.format(host))
-
+            #print_yellow('Output directory for host {} does exist. Overwriting!'.format(host))
+            print_yellow('Output directory for host {} does exist. Skipping..'.format(host))
+            continue
+            
         scan_proc = Process(target=host_recon, args=(host, host_work_dir, args.skip_tcp, args.skip_udp, args.pedantic_port_scan))
         scan_queue.append(scan_proc)
 
